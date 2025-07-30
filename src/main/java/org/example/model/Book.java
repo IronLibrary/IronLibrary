@@ -5,6 +5,7 @@ public class Book {
     private String title;
     private String category;
     private int quantity;
+    private String authorId;
 
     //CONSTRUCTOR
     public Book(String isbn, String title, String category, int quantity) {
@@ -46,5 +47,12 @@ public class Book {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public String getAuthorId() {
+        return authorId;
+    }
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
     }
 }
