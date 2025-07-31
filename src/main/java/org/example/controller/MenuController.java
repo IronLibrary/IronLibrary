@@ -2,12 +2,30 @@ package org.example.controller;
 
 import org.example.view.Menu;
 import java.util.Scanner;
+import org.example.model.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class MenuController {
     /**
      * Constructor de la clase MenuController.
      */
+
+    private final IssueController issueController;
+    private final List<Book> books;
+    private final List<Student> students;
+
     public MenuController() {
+        this.bookController = new IssueController();
+        this.books = new ArrayList<>();
+        this.students = new ArrayList<>();
+
+        //libros para teste
+
+        Author author = new Author("Nicholas Sparks", "nicholas@email.com");
+        books.add(new Book("978-3-16-148410-0", "The Notebook", "Romance", 5, author));
+        books.add(new Book("978-3-16-148411-0", "A Walk to Remember", "Romance", 3, author));
+
     }
     public void start() {
         Scanner scanner = new Scanner(System.in);
@@ -47,6 +65,39 @@ public class MenuController {
             }
         }
         scanner.close();
+    }
+
+    private void lendBookToStudent(Scanner scanner) {
+        System.out.print("Enter student USN: ");
+        String usn = scanner.nextLine();
+
+        System.out.print("Enter student name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter book ISBN: ");
+        String isbn = scanner.nextLine();
+
+        String result = issueController.lendBook(usn, name, isbn);
+        System.out.println(result);
+    }
+
+    private void listBooksByUSN(Scanner scanner) {
+        System.out.print("Enter student USN: ");
+        String usn = scanner.nextLine();
+
+        List<Issue> issues = issueController.getIssuesByUsn(usn);
+        if (issues.isEmpty()) {
+            System.out.println("No books issued to this student.");
+            return;
+        }
+
+        System.out.println("\nBooks issued to student " + usn + ":");
+        System.out.println("Title\t\t\tReturn Date");
+        for (Issue issue : issues) {
+            System.out.printf("%-20s\t%s\n",
+                    issue.getBook().getTitle(),
+                    issue.getReturnDate());
+        }
     }
 
     private void addBook() {
