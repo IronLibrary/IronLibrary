@@ -12,22 +12,27 @@ public class MenuController {
      */
 
     private final IssueController issueController;
+    private final BookController bookController;
     private final List<Book> books;
     private final List<Student> students;
 
     public MenuController() {
-        this.bookController = new IssueController();
-        this.books = new ArrayList<>();
-        this.students = new ArrayList<>();
+        this.books = new ArrayList<Book>();
+        this.students = new ArrayList<Student>();
+        this.issueController = new IssueController(books,students);
+        this.bookController = new BookController();
+
 
         //libros para teste
 
         Author author = new Author("Nicholas Sparks", "nicholas@email.com");
-        books.add(new Book("978-3-16-148410-0", "The Notebook", "Romance", 5, author));
-        books.add(new Book("978-3-16-148411-0", "A Walk to Remember", "Romance", 3, author));
+        books.add(new Book("978-3-16-148410-0", "The Notebook", "Romance", 5));
+        books.add(new Book("978-3-16-148411-0", "A Walk to Remember", "Romance", 3));
 
     }
     public void start() {
+        System.out.println("Initialize all of Lists");
+
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
         while (running) {
@@ -101,7 +106,11 @@ public class MenuController {
     }
 
     private void addBook() {
-        System.out.println("Add book (logic here)");
+        try {
+            bookController.addBook();
+        } catch (Exception e) {
+            System.out.println("Ocurrió un error al agregar el libro: " + e.getMessage());
+        }
     }
 
     private void searchBookByTitle() {
