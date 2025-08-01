@@ -12,22 +12,25 @@ public class MenuController {
      */
 
     private final IssueController issueController;
+    private final BookController bookController;
     private final List<Book> books;
     private final List<Student> students;
+    private final List<Author> authors;
 
     public MenuController() {
-        this.bookController = new IssueController();
-        this.books = new ArrayList<>();
-        this.students = new ArrayList<>();
-
-        //libros para teste
-
+        this.books = new ArrayList<Book>();
+        books.add(new Book("978-3-16-148410-0", "The Notebook", "Romance", 5));
+        books.add(new Book("978-3-16-148411-0", "A Walk to Remember", "Romance", 3));
         Author author = new Author("Nicholas Sparks", "nicholas@email.com");
-        books.add(new Book("978-3-16-148410-0", "The Notebook", "Romance", 5, author));
-        books.add(new Book("978-3-16-148411-0", "A Walk to Remember", "Romance", 3, author));
+        this.students = new ArrayList<Student>();
+        this.authors= new ArrayList<Author>();
 
+        this.issueController = new IssueController(books,students);
+        this.bookController = new BookController();
     }
     public void start() {
+        System.out.println("Initialize all of Lists");
+
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
         while (running) {
@@ -48,7 +51,7 @@ public class MenuController {
                         this.listAllBooksAndAuthors();
                         break;
                     case 6:
-                        this.lendBookToStudent();
+                        this.lendBookToStudent(scanner);
                         break;
                     case 7:
                         this.listBooksByUSN();
@@ -101,7 +104,11 @@ public class MenuController {
     }
 
     private void addBook() {
-        System.out.println("Add book (logic here)");
+        try {
+            bookController.addBook();
+        } catch (Exception e) {
+            System.out.println("An error occurred while adding the book: " + e.getMessage());
+        }
     }
 
     private void searchBookByTitle() {
@@ -114,10 +121,6 @@ public class MenuController {
 
     private void listAllBooksAndAuthors() {
         System.out.println("List all books and authors (logic here)");
-    }
-
-    private void lendBookToStudent() {
-        System.out.println("Lend book to student (logic here)");
     }
 
     private void listBooksByUSN() {
