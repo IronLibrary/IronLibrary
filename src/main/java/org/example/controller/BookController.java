@@ -3,9 +3,9 @@ package org.example.controller;
 import org.example.model.Book;
 import org.example.model.Author;
 import org.example.util.CsvWriterUtil;
+import org.example.util.PauseUtil;
 
 import java.io.*;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -30,25 +30,45 @@ public class BookController {
         }
         return null;
     }
+    // Busca un autor por nombre en el CSV
+    private String findAuthorByName(String isbn) {
+        try (BufferedReader br = new BufferedReader(new FileReader(AUTHOR_CSV))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] fields = line.split(",");
+                if (fields.length >= 4 && fields[3].equals(isbn)) {
+                    return fields[1];
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("❌ Error leyendo autores: " + e.getMessage());
+        }
+        return null;
+    }
 
     public void addBook() {
-        System.out.print("Enter isbn : ");
+        System.out.print("Enter isbn (e.g 978-x-xx-xxxxxx-x) : ");
+
         String isbn = scanner.nextLine();
 
         Book existingBook = findBookByIsbn(isbn);
+        String authorNameFound = findAuthorByName(isbn);
 
         if (existingBook != null) {
-            System.out.println("El libro ya existe. Título: " + existingBook.getTitle());
-            System.out.println("Categoría: " + existingBook.getCategory());
-            System.out.println("Cantidad actual: " + existingBook.getQuantity());
-            System.out.print("Ingrese la cantidad a añadir: ");
+            System.out.println("📚 The book already exists:");
+            System.out.println("   • Title: " + existingBook.getTitle());
+            System.out.println("   • Category: " + existingBook.getCategory());
+            System.out.println("   • Author: " + (authorNameFound != null ? authorNameFound : "Unknown"));
+            System.out.println("   • Current quantity: " + existingBook.getQuantity());
+            System.out.print("Enter the quantity to add: ");
             int addQuantity = Integer.parseInt(scanner.nextLine());
             existingBook.setQuantity(existingBook.getQuantity() + addQuantity);
 
             // Actualizar el libro en el CSV
             updateBookInCsv(existingBook);
-            System.out.println("Numeros de libros disponibles: " + existingBook.getQuantity());
-            System.out.println("✅ Cantidad actualizada correctamente.");
+            System.out.println("Number of books available: " + existingBook.getQuantity());
+            System.out.println("✅ Quantity updated successfully.");
+            PauseUtil.pause(2000);
             return;
         }
 
@@ -90,7 +110,7 @@ public class BookController {
 
     // Actualiza un libro existente en el CSV
     private void updateBookInCsv(Book updatedBook) {
-        List<String[]> allBooks = new ArrayList<>();
+        ArrayList<String[]> allBooks = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(BOOK_CSV))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -107,12 +127,12 @@ public class BookController {
                 }
             }
         } catch (IOException e) {
-            System.out.println("❌ Error leyendo libros para actualizar: " + e.getMessage());
+            System.out.println("❌ Error reading books to update: " + e.getMessage());
         }
         try {
             CsvWriterUtil.writeLinesToCsv(BOOK_CSV, allBooks);
         } catch (IOException e) {
-            System.out.println("❌ Error actualizando libro: " + e.getMessage());
+            System.out.println("❌ Error updating book: " + e.getMessage());
         }
     }
 }

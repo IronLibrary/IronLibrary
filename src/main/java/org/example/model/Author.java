@@ -16,7 +16,7 @@ public class Author {
         this.email = email;
         this.authoredBook = authoredBook;
     }
-    public Author( String name, String email) {
+    public Author(String name, String email) {
         this.authorId =  idCounter++;
         this.name = name;
         this.email = email;

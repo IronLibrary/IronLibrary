@@ -109,7 +109,7 @@ public class MenuController {
         try {
             bookController.addBook();
         } catch (Exception e) {
-            System.out.println("Ocurrió un error al agregar el libro: " + e.getMessage());
+            System.out.println("An error occurred while adding the book: " + e.getMessage());
         }
     }
 
