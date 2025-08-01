@@ -5,6 +5,7 @@ public class Book {
     private String title;
     private String category;
     private int quantity;
+    private Author author;
 
     //CONSTRUCTOR
     public Book(String isbn, String title, String category, int quantity) {
@@ -12,6 +13,11 @@ public class Book {
         this.title = title;
         this.category = category;
         this.quantity = quantity;
+    }
+
+    public Book(String isbn, String title, String category, int quantity, Author author) {
+        this(isbn, title, category, quantity);
+        this.author = author;
     }
 
     //GETTERS
@@ -31,6 +37,9 @@ public class Book {
         return quantity;
     }
 
+    public Author getAuthor() { return author; }
+
+
     //SETTERS
     public void setIsbn(String isbn) {
         this.isbn = isbn;
@@ -43,6 +52,8 @@ public class Book {
     public void setCategory(String category) {
         this.category = category;
     }
+
+    public void setAuthor(Author author) { this.author = author; }
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
