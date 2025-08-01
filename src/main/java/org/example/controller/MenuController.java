@@ -15,20 +15,18 @@ public class MenuController {
     private final BookController bookController;
     private final List<Book> books;
     private final List<Student> students;
+    private final List<Author> authors;
 
     public MenuController() {
         this.books = new ArrayList<Book>();
-        this.students = new ArrayList<Student>();
-        this.issueController = new IssueController(books,students);
-        this.bookController = new BookController();
-
-
-        //libros para teste
-
-        Author author = new Author("Nicholas Sparks", "nicholas@email.com");
         books.add(new Book("978-3-16-148410-0", "The Notebook", "Romance", 5));
         books.add(new Book("978-3-16-148411-0", "A Walk to Remember", "Romance", 3));
+        Author author = new Author("Nicholas Sparks", "nicholas@email.com");
+        this.students = new ArrayList<Student>();
+        this.authors= new ArrayList<Author>();
 
+        this.issueController = new IssueController(books,students);
+        this.bookController = new BookController();
     }
     public void start() {
         System.out.println("Initialize all of Lists");
@@ -53,7 +51,7 @@ public class MenuController {
                         this.listAllBooksAndAuthors();
                         break;
                     case 6:
-                        this.lendBookToStudent();
+                        this.lendBookToStudent(scanner);
                         break;
                     case 7:
                         this.listBooksByUSN();
@@ -123,10 +121,6 @@ public class MenuController {
 
     private void listAllBooksAndAuthors() {
         System.out.println("List all books and authors (logic here)");
-    }
-
-    private void lendBookToStudent() {
-        System.out.println("Lend book to student (logic here)");
     }
 
     private void listBooksByUSN() {
