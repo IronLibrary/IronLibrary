@@ -7,7 +7,9 @@ import org.example.util.PauseUtil;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class BookController {
 
@@ -135,5 +137,69 @@ public class BookController {
             System.out.println("❌ Error updating book: " + e.getMessage());
         }
     }
+
+    public List<Book> searchByTitle(String title) {
+        List<Book> allBooks = loadAllBooks();
+        return allBooks.stream()
+                .filter(book -> book.getTitle().toLowerCase().contains(title.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    public List<Book> searchByCategory(String category) {
+        List<Book> allBooks = loadAllBooks();
+        return allBooks.stream()
+                .filter(book -> book.getCategory().equalsIgnoreCase(category))
+                .collect(Collectors.toList());
+    }
+
+    public List<Book> searchByAuthor(String authorName) {
+        List<Book> allBooks = loadAllBooksWithAuthors();
+        return allBooks.stream()
+                .filter(book -> book.getAuthor() != null &&
+                        book.getAuthor().getName().toLowerCase().contains(authorName.toLowerCase()))
+                .collect(Collectors.toList());
+
+    }
+
+    private List<Book> loadAllBooks() {
+        List<Book> books = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(BOOK_CSV))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] fields = line.split(",");
+                if (fields.length >= 4) {
+                    books.add(new Book(fields[0], fields[1], fields[2], Integer.parseInt(fields[3])));
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("❌ Error loading books: " + e.getMessage());
+        }
+        return books;
+    }
+
+    private List<Book> loadAllBooksWithAuthors() {
+        List<Book> books = loadAllBooks();
+        try (BufferedReader br = new BufferedReader(new FileReader(AUTHOR_CSV))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] fields = line.split(",");
+                if (fields.length >= 4) {
+                    String isbn = fields[3];
+                    for (Book book : books) {
+                        if (book.getIsbn().equals(isbn)) {
+                            Author author = new Author(fields[1], fields[2], book);
+                            book.setAuthor(author);
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("❌ Error loading authors: " + e.getMessage());
+        }
+        return books;
+    }
 }
+
+
 
