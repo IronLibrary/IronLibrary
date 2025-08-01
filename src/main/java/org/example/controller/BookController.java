@@ -47,7 +47,7 @@ public class BookController {
     }
 
     public void addBook() {
-        System.out.print("Enter isbn (e.g 978-x-xx-xxxxxx-x) : ");
+        System.out.print("\t -> Enter isbn (e.g 978-x-xx-xxxxxx-x) : ");
 
         String isbn = scanner.nextLine();
 
@@ -72,19 +72,19 @@ public class BookController {
             return;
         }
 
-        System.out.print("Enter title : ");
+        System.out.print("\t -> Enter title : ");
         String title = scanner.nextLine();
 
-        System.out.print("Enter category : ");
+        System.out.print("\t -> Enter category : ");
         String category = scanner.nextLine();
 
-        System.out.print("Enter Author name : ");
+        System.out.print("\t -> Enter Author name : ");
         String authorName = scanner.nextLine();
 
-        System.out.print("Enter Author email : ");
+        System.out.print("\t -> Enter Author email : ");
         String authorEmail = scanner.nextLine();
 
-        System.out.print("Enter number of books : ");
+        System.out.print("\t -> Enter number of books : ");
         int quantity = Integer.parseInt(scanner.nextLine());
 
         Book book = new Book(isbn, title, category, quantity);
@@ -106,6 +106,14 @@ public class BookController {
         } catch (IOException e) {
             System.out.println("❌ Error saving data: " + e.getMessage());
         }
+        System.out.println("📚 Book added successfully:");
+        System.out.println("   • Title: " + book.getTitle());
+        System.out.println("   • Category: " + book.getCategory());
+        System.out.println("   • Author: " + author.getName());
+        System.out.println("   • Quantity: " + book.getQuantity());
+        System.out.println("   • ISBN: " + book.getIsbn());
+        System.out.println("   • Author Email: " + author.getEmail());
+        PauseUtil.pause(3000);
     }
 
     // Actualiza un libro existente en el CSV

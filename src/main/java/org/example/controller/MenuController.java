@@ -120,7 +120,25 @@ public class MenuController {
     }
 
     private void listAllBooksAndAuthors() {
-        System.out.println("List all books and authors (logic here)");
+        // This method should list all books and their authors.
+        System.out.println("List all books and authors");
+        System.out.println("+---------------------------+-------------------+------------+----------+");
+        System.out.println("| Title                     | ISBN              | Category   | Quantity |");
+        System.out.println("+---------------------------+-------------------+------------+----------+");
+        for (Book book : books) {
+            System.out.printf("| %-25s | %-17s | %-10s | %8d |\n",
+                    book.getTitle(), book.getIsbn(), book.getCategory(), book.getQuantity());
+        }
+        System.out.println("+---------------------------+-------------------+------------+----------+");
+
+        System.out.println("+---------------------------+---------------------------+");
+        System.out.println("| Author                    | Email                     |");
+        System.out.println("+---------------------------+---------------------------+");
+        for (Author author : authors) {
+            System.out.printf("| %-25s | %-25s |\n", author.getName(), author.getEmail());
+        }
+        System.out.println("+---------------------------+---------------------------+");
+
     }
 
     private void listBooksByUSN() {
