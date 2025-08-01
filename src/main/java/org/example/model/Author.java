@@ -3,7 +3,7 @@ package org.example.model;
 import org.example.model.Book;
 
 public class Author {
-    private static int idCounter = 1;
+    private static int idCounter = 5;
     private int authorId;
     private String name;
     private String email;

@@ -27,31 +27,31 @@ public class CsvValidator {
 
             // Check if ISBN is missing or empty
             if (book.getIsbn() == null || book.getIsbn().isEmpty()) {
-                System.out.println("❌ Skipping book with missing ISBN: " + book.getTitle());
+                System.out.println("Skipping book with missing ISBN: " + book.getTitle());
                 continue; // Skip this book
             }
 
             // Check if Title is missing or empty
             if (book.getTitle() == null || book.getTitle().isEmpty()) {
-                System.out.println("❌ Skipping book with missing Title for ISBN: " + book.getIsbn());
+                System.out.println("Skipping book with missing Title for ISBN: " + book.getIsbn());
                 continue;
             }
 
             // Check if Category is missing or empty
             if (book.getCategory() == null || book.getCategory().isEmpty()) {
-                System.out.println("❌ Skipping book with missing Category for ISBN: " + book.getIsbn());
+                System.out.println("Skipping book with missing Category for ISBN: " + book.getIsbn());
                 continue;
             }
 
             // Check for negative quantity
             if (book.getQuantity() < 0) {
-                System.out.println("❌ Skipping book with negative Quantity for ISBN: " + book.getIsbn());
+                System.out.println("Skipping book with negative Quantity for ISBN: " + book.getIsbn());
                 continue;
             }
 
             // Check for duplicate ISBNs
             if (!seenIsbn.add(book.getIsbn())) {
-                System.out.println("⚠️ Duplicate ISBN found, skipping: " + book.getIsbn());
+                System.out.println("Duplicate ISBN found, skipping: " + book.getIsbn());
                 continue;
             }
 
