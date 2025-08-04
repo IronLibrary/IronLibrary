@@ -15,8 +15,11 @@ public class BookController {
     private static final String BOOK_CSV = "src/main/data/book.csv";
     private static final String AUTHOR_CSV = "src/main/data/author.csv";
 
+    public BookController() {
+    }
+
     // Busca un libro por ISBN en el CSV
-    private Book findBookByIsbn(String isbn) {
+    public Book findBookByIsbn(String isbn) {
         try (BufferedReader br = new BufferedReader(new FileReader(BOOK_CSV))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -31,7 +34,7 @@ public class BookController {
         return null;
     }
     // Busca un autor por nombre en el CSV
-    private String findAuthorByName(String isbn) {
+    public String findAuthorByName(String isbn) {
         try (BufferedReader br = new BufferedReader(new FileReader(AUTHOR_CSV))) {
             String line;
             while ((line = br.readLine()) != null) {

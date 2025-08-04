@@ -10,6 +10,32 @@ public class IssueController {
     private List<Book> books;
     private List<Student> students;
 
+    public List<Issue> getIssues() {
+        return issues;
+    }
+
+    public void setIssues(List<Issue> issues) {
+        this.issues = issues;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
+
+
     public IssueController(List<Book> books, List<Student> students) {
         this.issues = new ArrayList<>();
         this.books = books;

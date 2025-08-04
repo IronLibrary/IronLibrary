@@ -5,35 +5,42 @@ import java.util.Scanner;
 import org.example.model.*;
 import java.util.List;
 import java.util.ArrayList;
+import org.example.util.CsvLoader;
 
 public class MenuController {
     /**
      * Constructor de la clase MenuController.
      */
 
+    private static final String BOOK_CSV = "src/main/data/book.csv";
+    private static final String AUTHOR_CSV = "src/main/data/author.csv";
+
     private final IssueController issueController;
     private final BookController bookController;
-    private final List<Book> books;
-    private final List<Student> students;
-    private final List<Author> authors;
+    private List<Book> books;
+    private List<Student> students;
+    private List<Author> authors;
+    private CsvLoader loader;
 
     public MenuController() {
         this.books = new ArrayList<Book>();
-        books.add(new Book("978-3-16-148410-0", "The Notebook", "Romance", 5));
-        books.add(new Book("978-3-16-148411-0", "A Walk to Remember", "Romance", 3));
-        Author author = new Author("Nicholas Sparks", "nicholas@email.com");
         this.students = new ArrayList<Student>();
         this.authors= new ArrayList<Author>();
 
         this.issueController = new IssueController(books,students);
         this.bookController = new BookController();
+        this.loader = new CsvLoader();
     }
     public void start() {
         System.out.println("Initialize all of Lists");
 
+
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
         while (running) {
+            this.books = loader.loadBooksFromCsv(BOOK_CSV);
+            this.authors = loader.loadAuthorsFromCsv(AUTHOR_CSV);
+            //Aqui ponemos una funcione que initializa la listas
             Menu.showMainMenu();
             try {
                 int option = Integer.parseInt(scanner.nextLine());
@@ -120,7 +127,25 @@ public class MenuController {
     }
 
     private void listAllBooksAndAuthors() {
-        System.out.println("List all books and authors (logic here)");
+        // This method should list all books and their authors.
+        System.out.println("List all books and authors");
+        System.out.println("+---------------------------+-------------------+------------+----------+");
+        System.out.println("| Title                     | ISBN              | Category   | Quantity |");
+        System.out.println("+---------------------------+-------------------+------------+----------+");
+        for (Book book : books) {
+            System.out.printf("| %-25s | %-17s | %-10s | %8d |\n",
+                    book.getTitle(), book.getIsbn(), book.getCategory(), book.getQuantity());
+        }
+        System.out.println("+---------------------------+-------------------+------------+----------+");
+
+        System.out.println("+---------------------------+---------------------------+");
+        System.out.println("| Author                    | Email                     |");
+        System.out.println("+---------------------------+---------------------------+");
+        for (Author author : authors) {
+            System.out.printf("| %-25s | %-25s |\n", author.getName(), author.getEmail());
+        }
+        System.out.println("+---------------------------+---------------------------+");
+
     }
 
     private void listBooksByUSN() {

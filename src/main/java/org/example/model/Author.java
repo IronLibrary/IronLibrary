@@ -23,6 +23,13 @@ public class Author {
         this.authoredBook = null; // No book associated initially
     }
 
+    public Author(int id, String name, String email, Book authoredBook) {
+        this.authorId =  id;
+        this.name = name;
+        this.email = email;
+        this.authoredBook = authoredBook; // No book associated initially
+    }
+
     //GETTERS
     public static int getIdCounter() {
         return idCounter;
