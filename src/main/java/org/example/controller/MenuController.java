@@ -5,35 +5,53 @@ import java.util.Scanner;
 import org.example.model.*;
 import java.util.List;
 import java.util.ArrayList;
+import org.example.util.CsvLoader;
 
 public class MenuController {
     /**
      * Constructor de la clase MenuController.
      */
 
+    private static final String BOOK_CSV = "src/main/data/book.csv";
+    private static final String AUTHOR_CSV = "src/main/data/author.csv";
+    private static final String STUDENT_CSV = "src/main/data/student.csv";
+    private static final String ISSUE_CSV = "src/main/data/issue.csv";
+
     private final IssueController issueController;
     private final BookController bookController;
-    private final List<Book> books;
-    private final List<Student> students;
-    private final List<Author> authors;
+    private List<Book> books;
+    private List<Student> students;
+    private List<Author> authors;
+    private CsvLoader loader;
+    private List<Issue> issues;
 
     public MenuController() {
-        this.books = new ArrayList<Book>();
-        books.add(new Book("978-3-16-148410-0", "The Notebook", "Romance", 5));
-        books.add(new Book("978-3-16-148411-0", "A Walk to Remember", "Romance", 3));
-        Author author = new Author("Nicholas Sparks", "nicholas@email.com");
-        this.students = new ArrayList<Student>();
-        this.authors= new ArrayList<Author>();
+        this.books = new ArrayList<>();
+        this.students = new ArrayList<>();
+        this.authors = new ArrayList<>();
+        this.issues = new ArrayList<>();
 
         this.issueController = new IssueController(books,students);
         this.bookController = new BookController();
+        this.loader = new CsvLoader(this.bookController, this.issueController);
     }
     public void start() {
         System.out.println("Initialize all of Lists");
 
+
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
         while (running) {
+            this.students = loader.loadStudentsFromCsv(STUDENT_CSV);
+            this.books = loader.loadBooksFromCsv(BOOK_CSV);
+            this.issues = loader.loadIssuesFromCsv(ISSUE_CSV);
+            this.authors = loader.loadAuthorsFromCsv(AUTHOR_CSV);
+            this.issueController.setBooks(this.books);
+            this.issueController.setIssues(this.issues);
+            this.issueController.setStudents(this.students);
+
+
+            //Aqui ponemos una funcione que initializa la listas
             Menu.showMainMenu();
             try {
                 int option = Integer.parseInt(scanner.nextLine());
@@ -54,7 +72,7 @@ public class MenuController {
                         this.lendBookToStudent(scanner);
                         break;
                     case 7:
-                        this.listBooksByUSN();
+                        this.listBooksByUSN(scanner);
                         break;
                     case 8:
                         running = false;
@@ -141,7 +159,4 @@ public class MenuController {
 
     }
 
-    private void listBooksByUSN() {
-        System.out.println("List books by USN (logic here)");
-    }
 }

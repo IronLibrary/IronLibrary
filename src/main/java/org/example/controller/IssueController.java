@@ -16,6 +16,9 @@ public class IssueController {
         this.students = students;
     }
 
+    public IssueController() {
+    }
+
     public String lendBook(String usn, String studentName, String isbn) {
         // 1. Find the book
         Book book = findBookByIsbn(isbn);
@@ -40,7 +43,8 @@ public class IssueController {
     public List<Issue> getIssuesByUsn(String usn) {
         List<Issue> result = new ArrayList<>();
         for (Issue issue : issues) {
-            if (issue.getStudent().getUsn().equals(usn)) {
+            Student student = issue.getStudent();
+            if (student != null && student.getUsn().equals(usn)) {
                 result.add(issue);
             }
         }
@@ -65,5 +69,38 @@ public class IssueController {
         Student newStudent = new Student(usn, name);
         students.add(newStudent);
         return newStudent;
+    }
+
+    public Student findStudentByUsn(String usn) {
+        for (Student student : students) {
+            if (student.getUsn().equals(usn)) {
+                return student;
+            }
+        }
+        return null;
+    }
+
+    public List<Issue> getIssues() {
+        return issues;
+    }
+
+    public void setIssues(List<Issue> issues) {
+        this.issues = issues;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 }
