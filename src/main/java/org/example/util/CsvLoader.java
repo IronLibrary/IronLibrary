@@ -107,7 +107,7 @@ public class CsvLoader {
                     continue;
                 }
                 String[] fields = line.split(",");
-                if (fields.length >= 1) {
+                if (fields.length >= 4) {
                     Student student = issueController.findStudentByUsn(fields[3]);
                     Book book = bookController.findBookByIsbn(fields[4]);
                     Issue issue = new Issue(Integer.parseInt(fields[0]), fields[1], fields[2], student, book);

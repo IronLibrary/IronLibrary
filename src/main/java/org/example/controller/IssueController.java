@@ -2,6 +2,9 @@
 package org.example.controller;
 
 import org.example.model.*;
+import org.example.util.CsvWriterUtil;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +12,7 @@ public class IssueController {
     private List<Issue> issues;
     private List<Book> books;
     private List<Student> students;
+    private static final String ISSUE_CSV = "src/main/data/issue.csv";
 
     public IssueController(List<Book> books, List<Student> students) {
         this.issues = new ArrayList<>();
@@ -33,6 +37,17 @@ public class IssueController {
         // 4. Create issue record
         Issue newIssue = new Issue(student, book);
         issues.add(newIssue);
+        String[] issueData = new String[] {
+                String.valueOf(newIssue.getId()), newIssue.getIssueDate(),newIssue.getReturnDate(), student.getUsn(),
+                book.getIsbn()
+        };
+        try {
+            CsvWriterUtil.appendLineToCsv(ISSUE_CSV, issueData);
+            System.out.println("✅ Issue saved successfully.");
+        } catch (IOException e) {
+            System.out.println("❌ Error saving data: " + e.getMessage());
+        }
+
 
         // 5. Update stock
         book.setQuantity(book.getQuantity() - 1);
@@ -72,7 +87,10 @@ public class IssueController {
     }
 
     public Student findStudentByUsn(String usn) {
+        System.out.println("Función llamada");
+        System.out.println(students.toString());
         for (Student student : students) {
+            System.out.println("Checking student: " + student + " for USN: " + usn);
             if (student.getUsn().equals(usn)) {
                 return student;
             }

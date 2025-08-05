@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Issue {
-    private static int nextId = 1;
+    private static int nextId = 5;
     private int id;
     private String issueDate;
     private String returnDate;
@@ -46,4 +46,14 @@ public class Issue {
     public String getReturnDate() { return returnDate; }
     public Student getStudent() { return student; }
     public Book getBook() { return book; }
+
+    public String toString() {
+        return "Issue{" +
+                "id=" + id +
+                ", issueDate='" + issueDate + '\'' +
+                ", returnDate='" + returnDate + '\'' +
+                ", student=" + student +
+                ", book=" + book +
+                '}';
+    }
 }

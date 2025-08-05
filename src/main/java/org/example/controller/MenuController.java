@@ -42,13 +42,15 @@ public class MenuController {
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
         while (running) {
+            System.out.println("Updating lists from CSV files...");
+
             this.students = loader.loadStudentsFromCsv(STUDENT_CSV);
+            this.issueController.setStudents(this.students);
             this.books = loader.loadBooksFromCsv(BOOK_CSV);
             this.issues = loader.loadIssuesFromCsv(ISSUE_CSV);
             this.authors = loader.loadAuthorsFromCsv(AUTHOR_CSV);
             this.issueController.setBooks(this.books);
             this.issueController.setIssues(this.issues);
-            this.issueController.setStudents(this.students);
 
 
             //Aqui ponemos una funcione que initializa la listas
@@ -75,6 +77,9 @@ public class MenuController {
                         this.listBooksByUSN(scanner);
                         break;
                     case 8:
+                        System.out.println(this.students);
+                        break;
+                    case 9:
                         running = false;
                         System.out.println("Exiting the application...");
                         break;
