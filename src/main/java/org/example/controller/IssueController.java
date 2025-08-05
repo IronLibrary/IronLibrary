@@ -10,36 +10,13 @@ public class IssueController {
     private List<Book> books;
     private List<Student> students;
 
-    public List<Issue> getIssues() {
-        return issues;
-    }
-
-    public void setIssues(List<Issue> issues) {
-        this.issues = issues;
-    }
-
-    public List<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }
-
-    public List<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
-
-
-
     public IssueController(List<Book> books, List<Student> students) {
         this.issues = new ArrayList<>();
         this.books = books;
         this.students = students;
+    }
+
+    public IssueController() {
     }
 
     public String lendBook(String usn, String studentName, String isbn) {
@@ -91,5 +68,38 @@ public class IssueController {
         Student newStudent = new Student(usn, name);
         students.add(newStudent);
         return newStudent;
+    }
+
+    public Student findStudentByUsn(String usn) {
+        for (Student student : students) {
+            if (student.getUsn().equals(usn)) {
+                return student;
+            }
+        }
+        return null;
+    }
+
+    public List<Issue> getIssues() {
+        return issues;
+    }
+
+    public void setIssues(List<Issue> issues) {
+        this.issues = issues;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 }

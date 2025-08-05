@@ -20,6 +20,14 @@ public class Issue {
         this.book = book;
     }
 
+    public Issue(int id, String issueDate, String returnDate, Student student, Book book) {
+        this.id = id;
+        this.issueDate = issueDate;
+        this.returnDate = returnDate;
+        this.student = student;
+        this.book = book;
+    }
+
     private String calculateReturnDate() {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
