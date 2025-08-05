@@ -62,10 +62,10 @@ public class MenuController {
                         this.addBook();
                         break;
                     case 2:
-                        this.searchBookByTitle();
+                        this.searchBookByTitle(scanner);
                         break;
                     case 3:
-                        this.searchBookByAuthor();
+                        this.searchBookByAuthor(scanner);
                         break;
                     case 5:
                         this.listAllBooksAndAuthors();
@@ -134,12 +134,52 @@ public class MenuController {
         }
     }
 
-    private void searchBookByTitle() {
-        System.out.println("Search book by title (logic here)");
+    private void searchBookByTitle(Scanner scanner) {
+        System.out.print("Enter book title to search: ");
+        List<Book> book = new ArrayList<>();
+        String title = scanner.nextLine();
+        if (title.isEmpty()) {
+            System.out.println("Title cannot be empty.");
+            return;
+        }
+        try {
+            book = bookController.searchByTitle(title);
+        } catch (Exception e) {
+            System.out.println("An error occurred while finding the book: " + e.getMessage());
+        }
+        if (book.isEmpty()) {
+            System.out.println("No books found with the title: " + title);
+        } else {
+            System.out.println("Books found:");
+            for (Book b : book) {
+                System.out.println("ISBN: " + b.getIsbn() + ", Title: " + b.getTitle() +
+                        ", Category: " + b.getCategory() + ", Quantity: " + b.getQuantity());
+            }
+        }
     }
 
-    private void searchBookByAuthor() {
-        System.out.println("Search book by author (logic here)");
+    private void searchBookByAuthor(Scanner scanner) {
+        System.out.print("Enter book Author to search: ");
+        List<Book> book = new ArrayList<>();
+        String authorName = scanner.nextLine();
+        if (authorName.isEmpty()) {
+            System.out.println("Author name cannot be empty.");
+            return;
+        }
+        try {
+            book = bookController.searchByAuthor(authorName);
+        } catch (Exception e) {
+            System.out.println("An error occurred while finding the book: " + e.getMessage());
+        }
+        if (book.isEmpty()) {
+            System.out.println("No books found with the author: " + authorName);
+        } else {
+            System.out.println("Books found:");
+            for (Book b : book) {
+                System.out.println("ISBN: " + b.getIsbn() + ", Title: " + b.getTitle() +
+                        ", Category: " + b.getCategory() + ", Quantity: " + b.getQuantity());
+            }
+        }
     }
 
     private void listAllBooksAndAuthors() {
