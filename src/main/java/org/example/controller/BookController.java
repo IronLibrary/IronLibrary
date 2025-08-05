@@ -7,7 +7,9 @@ import org.example.util.PauseUtil;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class BookController {
 
@@ -15,11 +17,8 @@ public class BookController {
     private static final String BOOK_CSV = "src/main/data/book.csv";
     private static final String AUTHOR_CSV = "src/main/data/author.csv";
 
-    public BookController() {
-    }
-
     // Busca un libro por ISBN en el CSV
-    public Book findBookByIsbn(String isbn) {
+    private Book findBookByIsbn(String isbn) {
         try (BufferedReader br = new BufferedReader(new FileReader(BOOK_CSV))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -34,7 +33,7 @@ public class BookController {
         return null;
     }
     // Busca un autor por nombre en el CSV
-    public String findAuthorByName(String isbn) {
+    private String findAuthorByName(String isbn) {
         try (BufferedReader br = new BufferedReader(new FileReader(AUTHOR_CSV))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -50,7 +49,7 @@ public class BookController {
     }
 
     public void addBook() {
-        System.out.print("\t -> Enter isbn (e.g 978-x-xx-xxxxxx-x) : ");
+        System.out.print("Enter isbn (e.g 978-x-xx-xxxxxx-x) : ");
 
         String isbn = scanner.nextLine();
 
@@ -75,19 +74,19 @@ public class BookController {
             return;
         }
 
-        System.out.print("\t -> Enter title : ");
+        System.out.print("Enter title : ");
         String title = scanner.nextLine();
 
-        System.out.print("\t -> Enter category : ");
+        System.out.print("Enter category : ");
         String category = scanner.nextLine();
 
-        System.out.print("\t -> Enter Author name : ");
+        System.out.print("Enter Author name : ");
         String authorName = scanner.nextLine();
 
-        System.out.print("\t -> Enter Author email : ");
+        System.out.print("Enter Author email : ");
         String authorEmail = scanner.nextLine();
 
-        System.out.print("\t -> Enter number of books : ");
+        System.out.print("Enter number of books : ");
         int quantity = Integer.parseInt(scanner.nextLine());
 
         Book book = new Book(isbn, title, category, quantity);
@@ -109,14 +108,6 @@ public class BookController {
         } catch (IOException e) {
             System.out.println("❌ Error saving data: " + e.getMessage());
         }
-        System.out.println("📚 Book added successfully:");
-        System.out.println("   • Title: " + book.getTitle());
-        System.out.println("   • Category: " + book.getCategory());
-        System.out.println("   • Author: " + author.getName());
-        System.out.println("   • Quantity: " + book.getQuantity());
-        System.out.println("   • ISBN: " + book.getIsbn());
-        System.out.println("   • Author Email: " + author.getEmail());
-        PauseUtil.pause(3000);
     }
 
     // Actualiza un libro existente en el CSV
@@ -146,5 +137,69 @@ public class BookController {
             System.out.println("❌ Error updating book: " + e.getMessage());
         }
     }
+
+    public List<Book> searchByTitle(String title) {
+        List<Book> allBooks = loadAllBooks();
+        return allBooks.stream()
+                .filter(book -> book.getTitle().toLowerCase().contains(title.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    public List<Book> searchByCategory(String category) {
+        List<Book> allBooks = loadAllBooks();
+        return allBooks.stream()
+                .filter(book -> book.getCategory().equalsIgnoreCase(category))
+                .collect(Collectors.toList());
+    }
+
+    public List<Book> searchByAuthor(String authorName) {
+        List<Book> allBooks = loadAllBooksWithAuthors();
+        return allBooks.stream()
+                .filter(book -> book.getAuthor() != null &&
+                        book.getAuthor().getName().toLowerCase().contains(authorName.toLowerCase()))
+                .collect(Collectors.toList());
+
+    }
+
+    private List<Book> loadAllBooks() {
+        List<Book> books = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(BOOK_CSV))) {
+            String line = br.readLine();
+            while ((line = br.readLine()) != null) {
+                String[] fields = line.split(",");
+                if (fields.length >= 4) {
+                    books.add(new Book(fields[0], fields[1], fields[2], Integer.parseInt(fields[3])));
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("❌ Error loading books: " + e.getMessage());
+        }
+        return books;
+    }
+
+    private List<Book> loadAllBooksWithAuthors() {
+        List<Book> books = loadAllBooks();
+        try (BufferedReader br = new BufferedReader(new FileReader(AUTHOR_CSV))) {
+            String line = br.readLine();
+            while ((line = br.readLine()) != null) {
+                String[] fields = line.split(",");
+                if (fields.length >= 4) {
+                    String isbn = fields[3];
+                    for (Book book : books) {
+                        if (book.getIsbn().equals(isbn)) {
+                            Author author = new Author(fields[1], fields[2], book);
+                            book.setAuthor(author);
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("❌ Error loading authors: " + e.getMessage());
+        }
+        return books;
+    }
 }
+
+
 
