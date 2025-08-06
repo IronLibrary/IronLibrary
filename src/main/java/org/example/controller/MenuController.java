@@ -5,35 +5,49 @@ import java.util.Scanner;
 import org.example.model.*;
 import java.util.List;
 import java.util.ArrayList;
+import org.example.util.CsvLoader;
 
 public class MenuController {
     /**
      * Constructor de la clase MenuController.
      */
 
+    private static final String BOOK_CSV = "src/main/data/book.csv";
+    private static final String AUTHOR_CSV = "src/main/data/author.csv";
+    private static final String STUDENT_CSV = "src/main/data/student.csv";
+    private static final String ISSUE_CSV = "src/main/data/issue.csv";
+
     private final IssueController issueController;
     private final BookController bookController;
-    private final List<Book> books;
-    private final List<Student> students;
-    private final List<Author> authors;
+    private List<Book> books;
+    private List<Student> students;
+    private List<Author> authors;
+    private CsvLoader loader;
+    private List<Issue> issues;
 
     public MenuController() {
-        this.books = new ArrayList<Book>();
-        books.add(new Book("978-3-16-148410-0", "The Notebook", "Romance", 5));
-        books.add(new Book("978-3-16-148411-0", "A Walk to Remember", "Romance", 3));
-        Author author = new Author("Nicholas Sparks", "nicholas@email.com");
-        this.students = new ArrayList<Student>();
-        this.authors= new ArrayList<Author>();
+        this.books = new ArrayList<>();
+        this.students = new ArrayList<>();
+        this.authors = new ArrayList<>();
+        this.issues = new ArrayList<>();
 
         this.issueController = new IssueController(books,students);
         this.bookController = new BookController();
+        this.loader = new CsvLoader(this.bookController, this.issueController);
     }
     public void start() {
-        System.out.println("Initialize all of Lists");
-
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
         while (running) {
+            System.out.println("Updating lists from CSV files...");
+            this.students = loader.loadStudentsFromCsv(STUDENT_CSV);
+            this.issueController.setStudents(this.students);
+            this.books = loader.loadBooksFromCsv(BOOK_CSV);
+            this.issues = loader.loadIssuesFromCsv(ISSUE_CSV);
+            this.authors = loader.loadAuthorsFromCsv(AUTHOR_CSV);
+            this.issueController.setBooks(this.books);
+            this.issueController.setIssues(this.issues);
+
             Menu.showMainMenu();
             try {
                 int option = Integer.parseInt(scanner.nextLine());
@@ -42,10 +56,10 @@ public class MenuController {
                         this.addBook();
                         break;
                     case 2:
-                        this.searchBookByTitle();
+                        this.searchBookByTitle(scanner);
                         break;
                     case 3:
-                        this.searchBookByAuthor();
+                        this.searchBookByAuthor(scanner);
                         break;
                     case 5:
                         this.listAllBooksAndAuthors();
@@ -54,9 +68,12 @@ public class MenuController {
                         this.lendBookToStudent(scanner);
                         break;
                     case 7:
-                        this.listBooksByUSN();
+                        this.listBooksByUSN(scanner);
                         break;
                     case 8:
+                        System.out.println(this.students);
+                        break;
+                    case 9:
                         running = false;
                         System.out.println("Exiting the application...");
                         break;
@@ -64,7 +81,7 @@ public class MenuController {
                         System.out.println("Invalid option. Please try again.");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Por favor, ingrese un número válido.");
+                System.out.println("Invalid input. Please enter a number.");
             }
         }
         scanner.close();
@@ -111,19 +128,74 @@ public class MenuController {
         }
     }
 
-    private void searchBookByTitle() {
-        System.out.println("Search book by title (logic here)");
+    private void searchBookByTitle(Scanner scanner) {
+        System.out.print("Enter book title to search: ");
+        List<Book> book = new ArrayList<>();
+        String title = scanner.nextLine();
+        if (title.isEmpty()) {
+            System.out.println("Title cannot be empty.");
+            return;
+        }
+        try {
+            book = bookController.searchByTitle(title);
+        } catch (Exception e) {
+            System.out.println("An error occurred while finding the book: " + e.getMessage());
+        }
+        if (book.isEmpty()) {
+            System.out.println("No books found with the title: " + title);
+        } else {
+            System.out.println("Books found:");
+            for (Book b : book) {
+                System.out.println("ISBN: " + b.getIsbn() + ", Title: " + b.getTitle() +
+                        ", Category: " + b.getCategory() + ", Quantity: " + b.getQuantity());
+            }
+        }
     }
 
-    private void searchBookByAuthor() {
-        System.out.println("Search book by author (logic here)");
+    private void searchBookByAuthor(Scanner scanner) {
+        System.out.print("Enter book Author to search: ");
+        List<Book> book = new ArrayList<>();
+        String authorName = scanner.nextLine();
+        if (authorName.isEmpty()) {
+            System.out.println("Author name cannot be empty.");
+            return;
+        }
+        try {
+            book = bookController.searchByAuthor(authorName);
+        } catch (Exception e) {
+            System.out.println("An error occurred while finding the book: " + e.getMessage());
+        }
+        if (book.isEmpty()) {
+            System.out.println("No books found with the author: " + authorName);
+        } else {
+            System.out.println("Books found:");
+            for (Book b : book) {
+                System.out.println("ISBN: " + b.getIsbn() + ", Title: " + b.getTitle() +
+                        ", Category: " + b.getCategory() + ", Quantity: " + b.getQuantity());
+            }
+        }
     }
 
     private void listAllBooksAndAuthors() {
-        System.out.println("List all books and authors (logic here)");
+        // This method should list all books and their authors.
+        System.out.println("List all books and authors");
+        System.out.println("+---------------------------+-------------------+------------+----------+");
+        System.out.println("| Title                     | ISBN              | Category   | Quantity |");
+        System.out.println("+---------------------------+-------------------+------------+----------+");
+        for (Book book : books) {
+            System.out.printf("| %-25s | %-17s | %-10s | %8d |\n",
+                    book.getTitle(), book.getIsbn(), book.getCategory(), book.getQuantity());
+        }
+        System.out.println("+---------------------------+-------------------+------------+----------+");
+
+        System.out.println("+---------------------------+---------------------------+");
+        System.out.println("| Author                    | Email                     |");
+        System.out.println("+---------------------------+---------------------------+");
+        for (Author author : authors) {
+            System.out.printf("| %-25s | %-25s |\n", author.getName(), author.getEmail());
+        }
+        System.out.println("+---------------------------+---------------------------+");
+
     }
 
-    private void listBooksByUSN() {
-        System.out.println("List books by USN (logic here)");
-    }
 }

@@ -5,7 +5,7 @@ public class Menu {
     private static final String RESET = "\u001B[0m";
     public static void showMainMenu() {
         System.out.println(GREEN + "╔══════════════════════════════════════╗" + RESET);
-        System.out.println(GREEN + "║         FLIGHT RESERVER MENU         ║" + RESET);
+        System.out.println(GREEN + "║         LIBRARY MANAGER MENU         ║" + RESET);
         System.out.println(GREEN + "╠══════════════════════════════════════╣" + RESET);
         System.out.println(GREEN + "║     1) Add a Book                    ║" + RESET);
         System.out.println(GREEN + "║     2) Search Book by Title          ║" + RESET);

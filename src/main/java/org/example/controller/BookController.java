@@ -18,7 +18,7 @@ public class BookController {
     private static final String AUTHOR_CSV = "src/main/data/author.csv";
 
     // Busca un libro por ISBN en el CSV
-    private Book findBookByIsbn(String isbn) {
+    public Book findBookByIsbn(String isbn) {
         try (BufferedReader br = new BufferedReader(new FileReader(BOOK_CSV))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -33,7 +33,7 @@ public class BookController {
         return null;
     }
     // Busca un autor por nombre en el CSV
-    private String findAuthorByName(String isbn) {
+    private String findAuthorByIsbn(String isbn) {
         try (BufferedReader br = new BufferedReader(new FileReader(AUTHOR_CSV))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -153,18 +153,23 @@ public class BookController {
     }
 
     public List<Book> searchByAuthor(String authorName) {
-        List<Book> allBooks = loadAllBooksWithAuthors();
-        return allBooks.stream()
-                .filter(book -> book.getAuthor() != null &&
-                        book.getAuthor().getName().toLowerCase().contains(authorName.toLowerCase()))
-                .collect(Collectors.toList());
 
+        List<Book> allBooks = loadAllBooks();
+        String authorIsbn = findAuthorByName(authorName);
+        if (authorIsbn == null) {
+            System.out.println("❌ Author not found.");
+            return new ArrayList<>();
+        }
+        return allBooks.stream()
+                .filter(book -> book.getIsbn().equals(authorIsbn))
     }
 
     private List<Book> loadAllBooks() {
         List<Book> books = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(BOOK_CSV))) {
-            String line;
+
+            String line = br.readLine();
+
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split(",");
                 if (fields.length >= 4) {
@@ -177,27 +182,20 @@ public class BookController {
         return books;
     }
 
-    private List<Book> loadAllBooksWithAuthors() {
-        List<Book> books = loadAllBooks();
+private String findAuthorByName(String authorName) {
         try (BufferedReader br = new BufferedReader(new FileReader(AUTHOR_CSV))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split(",");
-                if (fields.length >= 4) {
-                    String isbn = fields[3];
-                    for (Book book : books) {
-                        if (book.getIsbn().equals(isbn)) {
-                            Author author = new Author(fields[1], fields[2], book);
-                            book.setAuthor(author);
-                            break;
-                        }
-                    }
+                if (fields.length >= 4 && fields[1].equalsIgnoreCase(authorName)) {
+                    return fields[3]; // Return the ISBN associated with the author
                 }
             }
         } catch (IOException e) {
-            System.out.println("❌ Error loading authors: " + e.getMessage());
+            System.out.println("❌ Error reading authors: " + e.getMessage());
         }
-        return books;
+        return null;
+
     }
 }
 

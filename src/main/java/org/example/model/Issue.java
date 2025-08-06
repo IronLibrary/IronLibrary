@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Issue {
-    private static int nextId = 1;
+    private static int nextId = 5;
     private int id;
     private String issueDate;
     private String returnDate;
@@ -16,6 +16,14 @@ public class Issue {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         this.issueDate = sdf.format(new Date());
         this.returnDate = calculateReturnDate();
+        this.student = student;
+        this.book = book;
+    }
+
+    public Issue(int id, String issueDate, String returnDate, Student student, Book book) {
+        this.id = id;
+        this.issueDate = issueDate;
+        this.returnDate = returnDate;
         this.student = student;
         this.book = book;
     }
@@ -38,4 +46,14 @@ public class Issue {
     public String getReturnDate() { return returnDate; }
     public Student getStudent() { return student; }
     public Book getBook() { return book; }
+
+    public String toString() {
+        return "Issue{" +
+                "id=" + id +
+                ", issueDate='" + issueDate + '\'' +
+                ", returnDate='" + returnDate + '\'' +
+                ", student=" + student +
+                ", book=" + book +
+                '}';
+    }
 }
