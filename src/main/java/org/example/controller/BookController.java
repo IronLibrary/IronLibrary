@@ -90,6 +90,7 @@ public class BookController {
         int quantity = Integer.parseInt(scanner.nextLine());
 
         Book book = new Book(isbn, title, category, quantity);
+        try {
         Author author = new Author(authorName, authorEmail, book);
         author.setAuthoredBook(book);
 
@@ -101,7 +102,6 @@ public class BookController {
                 String.valueOf(author.getAuthorId()), author.getName(), author.getEmail(), isbn
         };
 
-        try {
             CsvWriterUtil.appendLineToCsv(BOOK_CSV, bookData);
             CsvWriterUtil.appendLineToCsv(AUTHOR_CSV, authorData);
             System.out.println("✅ Book and Author saved successfully.");
@@ -198,6 +198,3 @@ public class BookController {
     }
 
 }
-
-
-

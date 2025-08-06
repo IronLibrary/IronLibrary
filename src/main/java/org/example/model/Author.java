@@ -1,23 +1,23 @@
 package org.example.model;
 
-import org.example.model.Book;
+import org.example.util.CsvReaderUtil;
+import java.io.IOException;
 
 public class Author {
-    private static int idCounter = 5;
     private int authorId;
     private String name;
     private String email;
     private Book authoredBook;
 
     //CONSTRUCTOR
-    public Author(String name, String email, Book authoredBook) {
-        this.authorId = idCounter++;
+    public Author(String name, String email, Book authoredBook) throws IOException {
+        this.authorId = CsvReaderUtil.getNextId("src/main/data/author.csv");
         this.name = name;
         this.email = email;
         this.authoredBook = authoredBook;
     }
-    public Author(String name, String email) {
-        this.authorId =  idCounter++;
+    public Author(String name, String email) throws IOException {
+        this.authorId =  CsvReaderUtil.getNextId("src/main/data/author.csv");
         this.name = name;
         this.email = email;
         this.authoredBook = null; // No book associated initially
@@ -31,9 +31,7 @@ public class Author {
     }
 
     //GETTERS
-    public static int getIdCounter() {
-        return idCounter;
-    }
+
 
     public int getAuthorId() {
         return authorId;
@@ -52,9 +50,6 @@ public class Author {
     }
 
     //SETTERS
-    public static void setIdCounter(int idCounter) {
-        Author.idCounter = idCounter;
-    }
 
     public void setAuthorId(int authorId) {
         this.authorId = authorId;
