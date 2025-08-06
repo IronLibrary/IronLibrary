@@ -153,7 +153,6 @@ public class BookController {
     }
 
     public List<Book> searchByAuthor(String authorName) {
-
         List<Book> allBooks = loadAllBooks();
         String authorIsbn = findAuthorByName(authorName);
         if (authorIsbn == null) {
@@ -162,14 +161,14 @@ public class BookController {
         }
         return allBooks.stream()
                 .filter(book -> book.getIsbn().equals(authorIsbn))
+                .collect(Collectors.toList());
+
     }
 
     private List<Book> loadAllBooks() {
         List<Book> books = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(BOOK_CSV))) {
-
             String line = br.readLine();
-
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split(",");
                 if (fields.length >= 4) {
@@ -182,7 +181,7 @@ public class BookController {
         return books;
     }
 
-private String findAuthorByName(String authorName) {
+    private String findAuthorByName(String authorName) {
         try (BufferedReader br = new BufferedReader(new FileReader(AUTHOR_CSV))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -197,7 +196,5 @@ private String findAuthorByName(String authorName) {
         return null;
 
     }
+
 }
-
-
-
