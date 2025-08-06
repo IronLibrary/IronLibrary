@@ -88,7 +88,6 @@ public class IssueController {
 
     public Student findStudentByUsn(String usn) {
         for (Student student : students) {
-            System.out.println("Checking student: " + student + " for USN: " + usn);
             if (student.getUsn().equals(usn)) {
                 return student;
             }
