@@ -1,18 +1,20 @@
 package org.example.model;
 
+import org.example.util.CsvReaderUtil;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Issue {
-    private static int nextId = 5;
-    private int id;
-    private String issueDate;
-    private String returnDate;
-    private Student student;
-    private Book book;
+    private final int id;
+    private final String issueDate;
+    private final String returnDate;
+    private final Student student;
+    private final Book book;
 
-    public Issue(Student student, Book book) {
-        this.id = nextId++;
+    public Issue(Student student, Book book) throws IOException {
+        this.id = CsvReaderUtil.getNextId("src/main/data/issue.csv");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         this.issueDate = sdf.format(new Date());
         this.returnDate = calculateReturnDate();

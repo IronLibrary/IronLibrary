@@ -35,24 +35,24 @@ public class IssueController {
         Student student = findOrCreateStudent(usn, studentName);
 
         // 4. Create issue record
-        Issue newIssue = new Issue(student, book);
-        issues.add(newIssue);
-        String[] issueData = new String[] {
-                String.valueOf(newIssue.getId()), newIssue.getIssueDate(),newIssue.getReturnDate(), student.getUsn(),
-                book.getIsbn()
-        };
         try {
+            Issue newIssue = new Issue(student, book);
+            issues.add(newIssue);
+            String[] issueData = new String[] {
+                    String.valueOf(newIssue.getId()), newIssue.getIssueDate(), newIssue.getReturnDate(), student.getUsn(),
+                    book.getIsbn()
+            };
             CsvWriterUtil.appendLineToCsv(ISSUE_CSV, issueData);
             System.out.println("✅ Issue saved successfully.");
+
+            // 5. Update stock
+            book.setQuantity(book.getQuantity() - 1);
+
+            return "Book successfully issued! Return date: " + newIssue.getReturnDate();
         } catch (IOException e) {
             System.out.println("❌ Error saving data: " + e.getMessage());
+            return "Error issuing book: " + e.getMessage();
         }
-
-
-        // 5. Update stock
-        book.setQuantity(book.getQuantity() - 1);
-
-        return "Book successfully issued! Return date: " + newIssue.getReturnDate();
     }
 
     public List<Issue> getIssuesByUsn(String usn) {
