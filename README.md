@@ -1,12 +1,3 @@
-
-<div style="position: relative; width: 100%; height: 130px; display: flex; align-items: center; justify-content: 
-center; overflow: hidden;">
-  <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1200&q=80" alt="Librería" style="height: 100%; width: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1;">
-  <h1 style="position: relative; z-index: 2; color: white; background: rgba(0,0,0,0.5); width: 100%; text-align: center; padding: 0.5em 0; font-size: 2.5em; margin: 0; display: flex; align-items: center; justify-content: center; height: 100%;">
-    IronLibrary - IronHack
-  </h1>
-</div>
-
 # 📚 IronLibrary
 
 IronLibrary es un sistema de gestión de biblioteca desarrollado en Java con arquitectura MVC. Permite realizar operaciones básicas como agregar libros, prestar ejemplares a estudiantes y consultar información sobre autores, estudiantes y préstamos. Toda la persistencia se maneja mediante archivos CSV.
