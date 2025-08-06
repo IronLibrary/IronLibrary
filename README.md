@@ -1,5 +1,3 @@
-
-
 # 📚 IronLibrary
 
 IronLibrary es un sistema de gestión de biblioteca desarrollado en Java con arquitectura MVC. Permite realizar operaciones básicas como agregar libros, prestar ejemplares a estudiantes y consultar información sobre autores, estudiantes y préstamos. Toda la persistencia se maneja mediante archivos CSV.
