@@ -36,14 +36,10 @@ public class MenuController {
         this.loader = new CsvLoader(this.bookController, this.issueController);
     }
     public void start() {
-        System.out.println("Initialize all of Lists");
-
-
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
         while (running) {
             System.out.println("Updating lists from CSV files...");
-
             this.students = loader.loadStudentsFromCsv(STUDENT_CSV);
             this.issueController.setStudents(this.students);
             this.books = loader.loadBooksFromCsv(BOOK_CSV);
@@ -52,8 +48,6 @@ public class MenuController {
             this.issueController.setBooks(this.books);
             this.issueController.setIssues(this.issues);
 
-
-            //Aqui ponemos una funcione que initializa la listas
             Menu.showMainMenu();
             try {
                 int option = Integer.parseInt(scanner.nextLine());
@@ -87,7 +81,7 @@ public class MenuController {
                         System.out.println("Invalid option. Please try again.");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Por favor, ingrese un número válido.");
+                System.out.println("Invalid input. Please enter a number.");
             }
         }
         scanner.close();

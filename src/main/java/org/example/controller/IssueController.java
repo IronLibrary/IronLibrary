@@ -87,8 +87,6 @@ public class IssueController {
     }
 
     public Student findStudentByUsn(String usn) {
-        System.out.println("Función llamada");
-        System.out.println(students.toString());
         for (Student student : students) {
             System.out.println("Checking student: " + student + " for USN: " + usn);
             if (student.getUsn().equals(usn)) {
