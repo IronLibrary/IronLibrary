@@ -33,7 +33,7 @@ public class BookController {
         return null;
     }
     // Busca un autor por nombre en el CSV
-    private String findAuthorByName(String isbn) {
+    private String findAuthorByIsbn(String isbn) {
         try (BufferedReader br = new BufferedReader(new FileReader(AUTHOR_CSV))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -154,7 +154,7 @@ public class BookController {
 
     public List<Book> searchByAuthor(String authorName) {
         List<Book> allBooks = loadAllBooks();
-        String authorIsbn = findAutrhorByName(authorName);
+        String authorIsbn = findAuthorByName(authorName);
         if (authorIsbn == null) {
             System.out.println("❌ Author not found.");
             return new ArrayList<>();
@@ -181,7 +181,7 @@ public class BookController {
         return books;
     }
 
-    private String findAutrhorByName(String authorName) {
+    private String findAuthorByName(String authorName) {
         try (BufferedReader br = new BufferedReader(new FileReader(AUTHOR_CSV))) {
             String line;
             while ((line = br.readLine()) != null) {
