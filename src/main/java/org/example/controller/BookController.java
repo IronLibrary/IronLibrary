@@ -90,18 +90,18 @@ public class BookController {
         int quantity = Integer.parseInt(scanner.nextLine());
 
         Book book = new Book(isbn, title, category, quantity);
-        Author author = new Author(authorName, authorEmail, book);
-        author.setAuthoredBook(book);
-
-        String[] bookData = new String[] {
-                isbn, title, category, String.valueOf(quantity)
-        };
-
-        String[] authorData = new String[] {
-                String.valueOf(author.getAuthorId()), author.getName(), author.getEmail(), isbn
-        };
-
         try {
+            Author author = new Author(authorName, authorEmail, book);
+            author.setAuthoredBook(book);
+
+            String[] bookData = new String[] {
+                    isbn, title, category, String.valueOf(quantity)
+            };
+
+            String[] authorData = new String[] {
+                    String.valueOf(author.getAuthorId()), author.getName(), author.getEmail(), isbn
+            };
+
             CsvWriterUtil.appendLineToCsv(BOOK_CSV, bookData);
             CsvWriterUtil.appendLineToCsv(AUTHOR_CSV, authorData);
             System.out.println("✅ Book and Author saved successfully.");
@@ -196,5 +196,7 @@ public class BookController {
         return null;
 
     }
-
+    public List<Book> getAllBooks() {
+        return loadAllBooks(); // this is your private method already working
+    }
 }

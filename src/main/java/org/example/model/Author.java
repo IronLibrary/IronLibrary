@@ -30,6 +30,7 @@ public class Author {
         this.authoredBook = authoredBook; // No book associated initially
     }
 
+
     //GETTERS
     public static int getIdCounter() {
         return idCounter;

@@ -19,9 +19,9 @@ public class MenuController {
 
     private final IssueController issueController;
     private final BookController bookController;
-    private List<Book> books;
+    List<Book> books;
     private List<Student> students;
-    private List<Author> authors;
+    List<Author> authors;
     private CsvLoader loader;
     private List<Issue> issues;
 
@@ -176,7 +176,7 @@ public class MenuController {
         }
     }
 
-    private void listAllBooksAndAuthors() {
+    void listAllBooksAndAuthors() {
         // This method should list all books and their authors.
         System.out.println("List all books and authors");
         System.out.println("+---------------------------+-------------------+------------+----------+");
