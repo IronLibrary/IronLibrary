@@ -16,6 +16,7 @@ public class CsvReaderUtil {
             }
 
             while ((line = reader.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
                 rows.add(line.split(","));
             }
         }
