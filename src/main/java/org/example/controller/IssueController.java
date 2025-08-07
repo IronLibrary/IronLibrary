@@ -1,11 +1,11 @@
-// src/main/java/org/example/controller/IssueController.java
 package org.example.controller;
 
 import org.example.model.*;
 import org.example.util.CsvWriterUtil;
-
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class IssueController {
@@ -24,30 +24,26 @@ public class IssueController {
     }
 
     public String lendBook(String usn, String studentName, String isbn) {
-        // 1. Find the book
         Book book = findBookByIsbn(isbn);
         if (book == null) return "Book not found!";
-
-        // 2. Check availability
         if (book.getQuantity() <= 0) return "No copies available!";
 
-        // 3. Find or create student
         Student student = findOrCreateStudent(usn, studentName);
 
-        // 4. Create issue record
         try {
             Issue newIssue = new Issue(student, book);
             issues.add(newIssue);
             String[] issueData = new String[] {
-                    String.valueOf(newIssue.getId()), newIssue.getIssueDate(), newIssue.getReturnDate(), student.getUsn(),
+                    String.valueOf(newIssue.getId()),
+                    newIssue.getIssueDate(),
+                    newIssue.getReturnDate(),
+                    student.getUsn(),
                     book.getIsbn()
             };
             CsvWriterUtil.appendLineToCsv(ISSUE_CSV, issueData);
             System.out.println("✅ Issue saved successfully.");
 
-            // 5. Update stock
             book.setQuantity(book.getQuantity() - 1);
-
             return "Book successfully issued! Return date: " + newIssue.getReturnDate();
         } catch (IOException e) {
             System.out.println("❌ Error saving data: " + e.getMessage());
@@ -64,6 +60,20 @@ public class IssueController {
             }
         }
         return result;
+    }
+
+    public List<Issue> getBooksDueToday() {
+        List<Issue> dueToday = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String today = sdf.format(new Date());
+
+        for (Issue issue : issues) {
+            String returnDate = issue.getReturnDate().split("T")[0];
+            if (returnDate.equals(today)) {
+                dueToday.add(issue);
+            }
+        }
+        return dueToday;
     }
 
     private Book findBookByIsbn(String isbn) {
