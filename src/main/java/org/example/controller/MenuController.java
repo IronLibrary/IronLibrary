@@ -6,12 +6,16 @@ import org.example.model.*;
 import java.util.List;
 import java.util.ArrayList;
 import org.example.util.CsvLoader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MenuController {
     /**
      * Constructor de la clase MenuController.
      */
 
+    private static final String GREEN = "\u001B[32m";
+    private static final String RESET = "\u001B[0m";
     private static final String BOOK_CSV = "src/main/data/book.csv";
     private static final String AUTHOR_CSV = "src/main/data/author.csv";
     private static final String STUDENT_CSV = "src/main/data/student.csv";
@@ -74,6 +78,9 @@ public class MenuController {
                         System.out.println(this.students);
                         break;
                     case 9:
+                        this.listBooksDueToday();
+                        break;
+                    case 10:
                         running = false;
                         System.out.println("Exiting the application...");
                         break;
@@ -175,6 +182,37 @@ public class MenuController {
             }
         }
     }
+
+    private void listBooksDueToday() {
+        List<Issue> dueBooks = issueController.getBooksDueToday();
+
+        System.out.println("\n" + GREEN + "╔══════════════════════════════════════════════╗" + RESET);
+        System.out.println(GREEN + "║          BOOKS DUE TODAY (" +
+                new SimpleDateFormat("yyyy/MM/dd").format(new Date()) +
+                ")         ║" + RESET);
+        System.out.println(GREEN + "╠══════════════════════════════════════════════╣" + RESET);
+
+        if (dueBooks.isEmpty()) {
+            System.out.println(GREEN + "║         No books due for today         ║" + RESET);
+        } else {
+            System.out.println(GREEN + "║ " +
+                    String.format("%-5s %-5s %-5s", "TITLE", "STUDENT", "DUE DATE") +
+                    " ║" + RESET);
+            System.out.println(GREEN + "╠══════════════════════════════════════════════╣" + RESET);
+
+            for (Issue issue : dueBooks) {
+                System.out.println(GREEN + "║ " +
+                        String.format("%-20s %-20s %-10s",
+                                issue.getBook().getTitle(),
+                                issue.getStudent().getName(),
+                                issue.getReturnDate().split("T")[0]) +
+                        " ║" + RESET);
+            }
+        }
+        System.out.println(GREEN + "╚══════════════════════════════════════════════╝" + RESET);
+        System.out.println(" Total: " + dueBooks.size() + " book(s) due today");
+    }
+
 
     void listAllBooksAndAuthors() {
         // This method should list all books and their authors.
