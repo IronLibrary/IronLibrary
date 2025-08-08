@@ -14,8 +14,8 @@ public class Menu {
         System.out.println(GREEN + "║     5) List All Books & Authors      ║" + RESET);
         System.out.println(GREEN + "║     6) Lend Book to Student          ║" + RESET);
         System.out.println(GREEN + "║     7) List Books by USN             ║" + RESET);
-        System.out.println(GREEN + "║     9) List Books Due Today          ║" + RESET);
-        System.out.println(GREEN + "║     8) Exit                          ║" + RESET);
+        System.out.println(GREEN + "║     9) List all students             ║" + RESET);
+        System.out.println(GREEN + "║     10) Exit                         ║" + RESET);
         System.out.println(GREEN + "╚══════════════════════════════════════╝" + RESET);
         System.out.print(GREEN + ">> Please enter your choice: " + RESET);
     }
