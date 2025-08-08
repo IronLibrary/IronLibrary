@@ -6,12 +6,17 @@ import org.example.model.*;
 import java.util.List;
 import java.util.ArrayList;
 import org.example.util.CsvLoader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import org.example.util.PauseUtil;
 
 public class MenuController {
     /**
      * Constructor de la clase MenuController.
      */
 
+    private static final String GREEN = "\u001B[32m";
+    private static final String RESET = "\u001B[0m";
     private static final String BOOK_CSV = "src/main/data/book.csv";
     private static final String AUTHOR_CSV = "src/main/data/author.csv";
     private static final String STUDENT_CSV = "src/main/data/student.csv";
@@ -71,9 +76,12 @@ public class MenuController {
                         this.listBooksByUSN(scanner);
                         break;
                     case 8:
-                        System.out.println(this.students);
+                        this.listBooksDueToday();
                         break;
                     case 9:
+                        this.listStudents();
+                        break;
+                    case 10:
                         running = false;
                         System.out.println("Exiting the application...");
                         break;
@@ -99,6 +107,7 @@ public class MenuController {
 
         String result = issueController.lendBook(usn, name, isbn);
         System.out.println(result);
+        PauseUtil.pauseUntilKeyPress();
     }
 
     private void listBooksByUSN(Scanner scanner) {
@@ -118,6 +127,7 @@ public class MenuController {
                     issue.getBook().getTitle(),
                     issue.getReturnDate());
         }
+        PauseUtil.pauseUntilKeyPress();
     }
 
     private void addBook() {
@@ -126,6 +136,7 @@ public class MenuController {
         } catch (Exception e) {
             System.out.println("An error occurred while adding the book: " + e.getMessage());
         }
+        PauseUtil.pauseUntilKeyPress();
     }
 
     private void searchBookByTitle(Scanner scanner) {
@@ -150,6 +161,7 @@ public class MenuController {
                         ", Category: " + b.getCategory() + ", Quantity: " + b.getQuantity());
             }
         }
+        PauseUtil.pauseUntilKeyPress();
     }
 
     private void searchBookByAuthor(Scanner scanner) {
@@ -174,7 +186,53 @@ public class MenuController {
                         ", Category: " + b.getCategory() + ", Quantity: " + b.getQuantity());
             }
         }
+        PauseUtil.pauseUntilKeyPress();
     }
+    private void listStudents() {
+        System.out.println("List of students:");
+        System.out.println("+----------------+--------------------------------+");
+        System.out.println("| USN            | Name                           |");
+        System.out.println("+----------------+--------------------------------+");
+        for (Student student : students) {
+            System.out.printf("| %-14s | %-14s |\n",
+                    student.getUsn(), student.getName());
+        }
+        System.out.println("+----------------+--------------------------------+");
+        PauseUtil.pauseUntilKeyPress();
+    }
+
+    private void listBooksDueToday() {
+        List<Issue> dueBooks = issueController.getBooksDueToday();
+
+        System.out.println("\n" + GREEN + "╔═══════════════════════════════════════════════════════════╗" + RESET);
+        System.out.println(GREEN + "║                BOOKS DUE TODAY (" +
+                new SimpleDateFormat("yyyy/MM/dd").format(new Date()) +
+                ")               ║" + RESET);
+        System.out.println(GREEN + "╠═══════════════════════════════════════════════════════════╣" + RESET);
+
+        if (dueBooks.isEmpty()) {
+            System.out.println(GREEN + "║         No books due for today         ║" + RESET);
+        } else {
+            System.out.println(GREEN + "║ " +
+                    String.format("%-20s %-20s %-10s", "TITLE", "STUDENT", "DUE DATE") +
+                    "      ║" + RESET);
+            System.out.println(GREEN + "╠═══════════════════════════════════════════════════════════╣" + RESET);
+
+            for (Issue issue : dueBooks) {
+                System.out.println(GREEN + "║ " +
+                        String.format("%-20s | %-20s | %-10s",
+                                issue.getBook().getTitle(),
+                                issue.getStudent().getName(),
+                                issue.getReturnDate().split("T")[0]) +
+                        "  ║" + RESET);
+            }
+        }
+        System.out.println(GREEN + "╚═══════════════════════════════════════════════════════════╝" + RESET);
+        System.out.println(" Total: " + dueBooks.size() + " book(s) due today");
+
+        PauseUtil.pauseUntilKeyPress();
+    }
+
 
     void listAllBooksAndAuthors() {
         // This method should list all books and their authors.
@@ -195,6 +253,7 @@ public class MenuController {
             System.out.printf("| %-25s | %-25s |\n", author.getName(), author.getEmail());
         }
         System.out.println("+---------------------------+---------------------------+");
+        PauseUtil.pauseUntilKeyPress();
 
     }
 
